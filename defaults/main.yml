@@ -1,0 +1,4 @@
+---
+golang_version: "1.15.6"
+golang_archive: "go{{ golang_version }}.linux-amd64.tar.gz"
+

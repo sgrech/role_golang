@@ -1,0 +1,25 @@
+---
+- name: Check golang already installed
+  stat:
+    path: "/usr/local/go"
+  register: golang
+
+- name: Get golang binaries
+  get_url:
+    url: "https://golang.org/dl/{{ golang_archive }}"
+    dest: "/tmp/{{ golang_archive }}"
+  when: not golang.stat.exists
+
+- name: Unpack archive
+  unarchive:
+    src: "/tmp/{{ golang_archive }}"
+    dest: "/usr/local"
+    remote_src: yes
+  when: not golang.stat.exists
+
+- name: Ensure golang binaries in path
+  lineinfile:
+    path: "/home/{{ ansible_user }}/.profile"
+    regexp: "/usr/local/go/bin$"
+    line: export PATH=$PATH:/usr/local/go/bin
+
